@@ -1,0 +1,106 @@
+perlin/roughness_map:
+  output: geo_rough.npy
+
+  seed: 1
+  size: [257, 257]
+  wavelength: 128
+  octaves: 1
+
+  range: [0, 10]
+
+perlin/scale_map:
+  output: geo_scale.npy
+
+  seed: 2
+  size: [257, 257]
+  wavelength: 128
+  octaves: 1
+
+  range: [0, 300]
+
+geo:
+  midpoint_displacement_fractal:
+    seed: 0
+
+    num_squares: [8, 8]
+    square_size: 32
+    base_level: 200
+    primary_scale: 300
+    roughness: 3
+    cell_size_meters: 100
+
+hydro_sim:
+  viscosity: 0.1
+  rainfall: 0.01
+
+  max_iters: 100_000
+
+hydro_adj:
+  level_reduction: 2
+  depth_threshold: 2
+
+variants:
+#  - name: roughness map
+#    geo:
+#      midpoint_displacement_fractal:
+#        roughness: geo_rough.npy
+#        primary_scale: geo_scale.npy
+#    hydro_adj:
+#      level_reduction: 20
+#  - name: Vroughness_map_flat
+#    perlin/Mroughness:
+#      range: [0, 0]
+#    perlin/Mscale:
+#      range: [0, 0]
+#    geo:
+#      midpoint_displacement_fractal:
+#        roughness: geo_rough.npy
+#        primary_scale: geo_scale.npy
+#    hydro_adj:
+#      level_reduction: 20
+
+  - name: rougher
+    geo:
+      midpoint_displacement_fractal:
+        primary_scale: 300
+        roughness: 6
+
+  # Observation: this variant has more water flows, because it already holds more water pre-erosion due to all the terrain detail
+#  - name: rougher+erosion
+#    geo:
+#      midpoint_displacement_fractal:
+#        primary_scale: 300
+#        roughness: 6
+#    hydro_adj:
+#      erosion:
+#        iterations: 10_000
+#        strength: 0.001
+#        sideways_coeff: 1
+#        viscosity: 0.1
+#        rainfall: 0.01
+
+  - name: erosion
+    hydro_adj:
+      erosion:
+        iterations: 10_000
+        strength: 0.001
+        sideways_coeff: 1
+        viscosity: 0.1
+        rainfall: 0.01
+
+  - name: erosion & less viscosity
+    hydro_sim:
+      viscosity: 0.09
+    hydro_adj:
+      erosion:
+        iterations: 10_000
+        strength: 0.001
+        sideways_coeff: 1
+        viscosity: 0.05
+        rainfall: 0.01
+
+  - name: less rain
+    hydro_sim:
+      rainfall: 0.005
+
+# TODO: follow up with a water sim step with MUCH less rainfall
