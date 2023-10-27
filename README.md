@@ -27,8 +27,6 @@ there are some specifics/advantages over other approaches including plain Make:
 
 ### btw
 
-- the pipeline contains certain [default steps](pipeline_world.py#844).
-  at some point that turned out to be a bad idea -- warnings are now emitted for this.
 - plotting steps are usually separate from the computation itself, because matplotlib is _slow_
   and in the meantime, the outputs can be used by subsequent steps
     - plotting step can be emitted by the computation step, see the example in [GeoStep](pipeline_world.py#L26)

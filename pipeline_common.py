@@ -25,8 +25,7 @@ class Operator(abc.ABC):
 
 @dataclass
 class Pipeline:
-    all_steps: Set[type]
-    default_steps: List[type]
+    all_steps: List[type]       # might as well be Set, but we want consistent iteration order
 
     def expand_triggered_operators(self, operator: Operator) -> List[Operator]:
         queue = [operator]

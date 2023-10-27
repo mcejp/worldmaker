@@ -828,28 +828,15 @@ class SunCoverageOperator(Operator):
         #     f['sun_coverage_map'] = sun_coverage
 
 pipeline_world = Pipeline(all_steps=[
+        BlenderRenderStep,
         GeoStep,
         GeoPlotStep,
-        HydroSimStep,
         HydroAdjustStep,
         HydroPlotsStep,
-        PlyExportStep,
-        BlenderRenderStep,
-
-        # Alphabetic order from here on
+        HydroSimStep,
         PerlinOperator,
+        PlyExportStep,
         SrtmExtractOperator,
         SunCoverageOperator,
         TemperatureOperator,
-    ],
-    default_steps=[
-        GeoStep,
-        GeoPlotStep,
-        HydroSimStep,
-        HydroAdjustStep,
-        HydroPlotsStep,
-        SunCoverageOperator,
-        TemperatureOperator,
-        PlyExportStep,
-        BlenderRenderStep,
     ])

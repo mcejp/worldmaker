@@ -63,28 +63,24 @@ def exec_pipeline(pipeline_name: str, p: Pipeline, spec_path: Path, /, cache_dir
 
     # Determine pipeline tasks. This is not very smart right now as custom tasks can only be put at the beginning.
     pipeline_tasks = []
-    would_be_triggered = set()
 
     for spec_key, options in spec.items():
+        if spec_key == "variants":
+            continue
+
         # TODO: need to also instantiate sub-operators
         if "/" in spec_key:
+            # format: "operator_name/task_name"
             operator_name, task_name = spec_key.split("/")
-            operator = p.get_operator_by_name(operator_name)
-            pipeline_tasks.append((task_name, operator, spec_key))
-        elif spec_key != "variants":
+        else:
+            # format: "operator_name" (task name defaults to operator name)
             operator_name = spec_key
-            operator = p.get_operator_by_name(operator_name)
+            task_name = operator_name
 
-            for leaf_operator in p.expand_triggered_operators(operator):
-                would_be_triggered.add(leaf_operator.NAME)
+        operator = p.get_operator_by_name(operator_name)
 
-    for operator in p.default_steps:
-        operator_sanitized_name = operator.NAME.replace(":", "_")
-        options_key = operator.NAME.split(":")[0]
-        pipeline_tasks.append((operator_sanitized_name, operator, options_key))
-
-        if operator.NAME not in would_be_triggered:
-            warnings.append(f"Implicitly instantiated operator {operator.NAME}")
+        for leaf_operator in p.expand_triggered_operators(operator):
+            pipeline_tasks.append((task_name, leaf_operator, spec_key))
 
     # observation: erosion is wrong in that it doesn't take into account difference in depth (for the same surface level)
     #              -- it should not apply equally, but instead towards flattening to bottom

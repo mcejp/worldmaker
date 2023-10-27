@@ -39,6 +39,12 @@ hydro_adj:
   level_reduction: 2
   depth_threshold: 2
 
+hydro_plots: {}
+sun_coverage: {}
+temperature: {}
+ply_export: {}
+blender_render: {}
+
 variants:
 #  - name: roughness map
 #    geo:

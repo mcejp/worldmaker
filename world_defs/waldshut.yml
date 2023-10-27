@@ -1,4 +1,4 @@
-srtm_extract/srtm_extract:
+srtm_extract:
   # Waldshut-Tiengen 47°37′23″N 08°12′52″E
   center: [[47, 37, 23], [8, 12, 52]]
   size_m: [20_000, 20_000]
@@ -17,6 +17,12 @@ hydro_sim:
 hydro_adj:
   level_reduction: 1
   depth_threshold: 1
+
+hydro_plots: {}
+sun_coverage: {}
+temperature: {}
+ply_export: {}
+blender_render: {}
 
 variants:
   # FIXME: flow_change_in_limit thresholds too eager for these
