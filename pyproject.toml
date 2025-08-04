@@ -1,0 +1,14 @@
+[project]
+name = "worldmaker2"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "h5py>=3.14.0",
+    "matplotlib>=3.10.5",
+    "numpy>=2.3.2",
+    "pillow>=11.3.0",
+    "plyfile>=1.1.2",
+    "pyyaml>=6.0.2",
+]
