@@ -464,7 +464,7 @@ class BlenderRenderStep(Operator):
 
 class PerlinOperator(Operator):
     NAME = "perlin"
-    VERSION = 3
+    VERSION = 4
 
     def get_inputs(self):
         return set()
@@ -473,7 +473,7 @@ class PerlinOperator(Operator):
         return {"$output", "$output.png"}
 
     def run(self, input_paths, output_paths):
-        from worldgenlib.perlin import perlin_octaves2
+        from perlin_numpy import generate_fractal_noise_2d
 
         w, h = self.spec["size"]
 
@@ -484,7 +484,10 @@ class PerlinOperator(Operator):
             return 1 if x == 0 else 2**(x - 1).bit_length()
         w_po2 = next_power_of_2(w)
         h_po2 = next_power_of_2(h)
-        result = perlin_octaves2(rng, w_po2, h_po2, wavelength=self.spec["wavelength"], octaves=self.spec["octaves"])
+        result = generate_fractal_noise_2d(shape=(w_po2, h_po2),
+                                           res=(w_po2 // self.spec["wavelength"], h_po2 // self.spec["wavelength"]),
+                                           octaves=self.spec["octaves"],
+                                           rng=rng) / np.sqrt(2)
         real_min, real_max = np.amin(result), np.amax(result); print("perlin ->", real_min, real_max)
         result = result[:w, :h]
 
